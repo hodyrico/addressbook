@@ -12,7 +12,7 @@ pipeline {
     stages {
     stage('1. Git Checkout') {
       steps {
-        git branch: 'release', credentialsId: 'Github-pat', url: 'https://github.com/ndiforfusi/addressbook.git'
+        git branch: 'release', credentialsId: 'Github-pat', url: 'https://github.com/hodyrico/addressbook.git'
       }
     }
     stage('2. Build with Maven') { 
@@ -30,7 +30,7 @@ pipeline {
                       ${scannerHome}/bin/sonar-scanner  \
                       -Dsonar.projectKey=addressbook-application \
                       -Dsonar.projectName='addressbook-application' \
-                      -Dsonar.host.url=https://sonarqube.dominionsystem.org \
+                      -Dsonar.host.url=http://34.210.9.5:9000 \
                       -Dsonar.token=${SONAR_TOKEN} \
                       -Dsonar.sources=src/main/java/ \
                       -Dsonar.java.binaries=target/classes \
@@ -40,10 +40,10 @@ pipeline {
         }
     stage('4. Docker Image Build') {
       steps {
-        sh "aws ecr-public get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin public.ecr.aws/a1o0c8b5"
+        sh "aws ecr-public get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin public.ecr.aws/w9w9i7z2"
         sh "sudo docker build -t addressbook ."
-        sh "sudo docker tag addressbook:latest public.ecr.aws/a1o0c8b5/addressbook:${params.ecr_tag}"
-        sh "sudo docker push public.ecr.aws/a1o0c8b5/addressbook:${params.ecr_tag}"
+        sh "sudo docker tag addressbook:latest public.ecr.aws/w9w9i7z2/addressbook:${params.ecr_tag}"
+        sh "sudo docker push public.ecr.aws/w9w9i7z2/addressbook:${params.ecr_tag}"
       }
     }
 
@@ -67,13 +67,13 @@ pipeline {
 
     stage('7. Email Notification') {
       steps {
-        mail bcc: 'fusisoft@gmail.com', body: '''Build is Over. Check the application using the URL below:
+        mail bcc: 'hodygaba@gmail.com', body: '''Build is Over. Check the application using the URL below:
          https://abook.dominionsystem.com/addressbook-1.0
          Let me know if the changes look okay.
          Thanks,
          Dominion System Technologies,
          +1 (313) 413-1477''', 
-         subject: 'Application was Successfully Deployed!!', to: 'fusisoft@gmail.com'
+         subject: 'Application was Successfully Deployed!!', to: 'hodygaba@gmail.com'
       }
     }
   }

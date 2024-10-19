@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: addressbook-container
-        image: public.ecr.aws/a1o0c8b5/addressbook:1.0.0
+        image: public.ecr.aws/w9w9i7z2/addressbook:1.0.0
         ports:
         - containerPort: 8080
 
